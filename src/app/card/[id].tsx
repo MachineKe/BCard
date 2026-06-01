@@ -41,9 +41,16 @@ export default function CardDetailsScreen() {
 
     const exportToPDF = async () => {
         const html = `
+            <!DOCTYPE html>
             <html>
-            <body style="font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f9fafb;">
-                <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); width: 100%; max-width: 500px; text-align: center;">
+            <head>
+                <style>
+                    @page { margin: 20px; }
+                    body { font-family: sans-serif; background-color: #f9fafb; margin: 0; padding: 20px; display: flex; justify-content: center; }
+                </style>
+            </head>
+            <body>
+                <div style="background: white; padding: 40px; border-radius: 16px; border: 1px solid #e5e7eb; width: 100%; max-width: 500px; text-align: center;">
                     <h1 style="color: #111827; margin-bottom: 8px; font-size: 32px;">${card.name}</h1>
                     <h3 style="color: #2563EB; margin-top: 0; font-size: 20px;">${card.title}</h3>
                     ${card.company ? `<p style="color: #4B5563; font-size: 18px;">${card.company}</p>` : ''}
@@ -51,6 +58,10 @@ export default function CardDetailsScreen() {
                         ${card.email ? `<p style="margin: 8px 0; color: #374151;"><strong>Email:</strong> ${card.email}</p>` : ''}
                         ${card.phone ? `<p style="margin: 8px 0; color: #374151;"><strong>Phone:</strong> ${card.phone}</p>` : ''}
                         ${card.website ? `<p style="margin: 8px 0; color: #374151;"><strong>Website:</strong> ${card.website}</p>` : ''}
+                    </div>
+                    <div style="margin-top: 32px; text-align: center;">
+                        <p style="color: #111827; font-weight: 600; margin-bottom: 12px;">Scan to Save Contact</p>
+                        <img src="https://quickchart.io/qr?text=${encodeURIComponent(vCardData)}&size=200" width="150" height="150" />
                     </div>
                 </div>
             </body>

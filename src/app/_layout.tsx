@@ -1,15 +1,27 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { initDb } from '@/database/sqlite';
+import '@/global.css';
+import { Stack } from 'expo-router';
+import { useEffect, useState } from 'react';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+export default function RootLayout() {
+  const [isDbInitialized, setDbInitialized] = useState(false);
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    try {
+      initDb();
+      setDbInitialized(true);
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  if (!isDbInitialized) return null;
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="create" options={{ presentation: 'modal', title: 'Create Card' }} />
+      <Stack.Screen name="card/[id]" options={{ title: 'Card Details' }} />
+    </Stack>
   );
 }

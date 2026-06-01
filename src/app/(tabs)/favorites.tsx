@@ -12,9 +12,9 @@ export default function FavoritesScreen() {
     const favoriteCards = cards.filter(card => card.isFavorite);
 
     return (
-        <SafeAreaView className="flex-1 bg-gray-50">
+        <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
             <View className="flex-1 px-4 pt-4">
-                <Text className="text-3xl font-bold text-gray-900 mb-6">Favorites</Text>
+                <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Favorites</Text>
 
                 <FlatList
                     data={favoriteCards}

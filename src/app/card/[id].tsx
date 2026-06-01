@@ -137,9 +137,11 @@ export default function CardDetailsScreen() {
                     <CorporateTemplate card={card} />
                 </View>
 
-                <View className="bg-white rounded-2xl p-6 items-center shadow-sm border border-gray-100">
-                    <Text className="font-semibold text-gray-900 mb-4">Scan to Save Contact</Text>
-                    <QRCode value={vCardData} size={200} color="black" backgroundColor="white" />
+                <View className="bg-white dark:bg-gray-800 rounded-2xl p-6 items-center shadow-sm border border-gray-100 dark:border-gray-700">
+                    <Text className="font-semibold text-gray-900 dark:text-white mb-4">Scan to Save Contact</Text>
+                    <View className="bg-white p-2 rounded-xl">
+                        <QRCode value={vCardData} size={200} color="black" backgroundColor="white" />
+                    </View>
                 </View>
 
                 <View className="flex-row flex-wrap gap-4">
@@ -158,9 +160,9 @@ export default function CardDetailsScreen() {
                         <SymbolView name="pencil" size={20} tintColor={isDark ? "#4ADE80" : "#16A34A"} />
                         <Text className="text-green-700 dark:text-green-400 font-medium">Edit</Text>
                     </Pressable>
-                    <Pressable onPress={exportToPDF} className="w-full bg-gray-800 dark:bg-gray-100 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
-                        <SymbolView name="doc.fill" size={20} tintColor={isDark ? "#111827" : "#ffffff"} />
-                        <Text className="text-white dark:text-gray-900 font-medium">Export to PDF</Text>
+                    <Pressable onPress={exportToPDF} className="w-full bg-gray-800 dark:bg-gray-700 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
+                        <SymbolView name="doc.fill" size={20} tintColor="#ffffff" />
+                        <Text className="text-white font-medium">Export to PDF</Text>
                     </Pressable>
                     <Pressable onPress={handleDelete} className="w-full bg-red-100 dark:bg-red-900/40 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
                         <SymbolView name="trash" size={20} tintColor={isDark ? "#F87171" : "#DC2626"} />

@@ -27,9 +27,9 @@ export default function FavoritesScreen() {
                     )}
                     ListEmptyComponent={
                         <View className="flex-1 items-center justify-center mt-20">
-                            <SymbolView name="star.slash" size={64} tintColor="#CBD5E1" />
-                            <Text className="text-gray-500 text-lg font-medium mt-4">No favorites yet</Text>
-                            <Text className="text-gray-400 text-sm mt-1 text-center mt-2">
+                            <SymbolView name="star.slash" size={64} tintColor="#6B7280" />
+                            <Text className="text-gray-500 dark:text-gray-400 text-lg font-medium mt-4">No favorites yet</Text>
+                            <Text className="text-gray-400 dark:text-gray-500 text-sm mt-1 text-center mt-2">
                                 Cards you favorite will appear here.
                             </Text>
                         </View>

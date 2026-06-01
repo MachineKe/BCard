@@ -5,6 +5,7 @@ import * as Print from 'expo-print';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { SymbolView } from 'expo-symbols';
+import { useColorScheme } from 'nativewind';
 import { useRef } from 'react';
 import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -15,13 +16,15 @@ export default function CardDetailsScreen() {
     const router = useRouter();
     const { cards, deleteCard, toggleFavorite } = useCardsStore();
     const cardRef = useRef<View>(null);
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
 
     const card = cards.find(c => c.id === id);
 
     if (!card) {
         return (
-            <View className="flex-1 items-center justify-center bg-gray-50">
-                <Text className="text-gray-500">Card not found</Text>
+            <View className="flex-1 items-center justify-center bg-gray-50 dark:bg-gray-900">
+                <Text className="text-gray-500 dark:text-gray-400">Card not found</Text>
             </View>
         );
     }
@@ -128,7 +131,7 @@ export default function CardDetailsScreen() {
     };
 
     return (
-        <ScrollView className="flex-1 bg-gray-50">
+        <ScrollView className="flex-1 bg-gray-50 dark:bg-gray-900">
             <View className="p-4 gap-y-6">
                 <View ref={cardRef} collapsable={false}>
                     <CorporateTemplate card={card} />
@@ -142,26 +145,26 @@ export default function CardDetailsScreen() {
                 <View className="flex-row flex-wrap gap-4">
                     <Pressable
                         onPress={() => toggleFavorite(card.id)}
-                        className={`flex-1 min-w-[45%] py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80 ${card.isFavorite ? 'bg-yellow-100' : 'bg-gray-200'}`}
+                        className={`flex-1 min-w-[45%] py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80 ${card.isFavorite ? 'bg-yellow-100 dark:bg-yellow-900/40' : 'bg-gray-200 dark:bg-gray-800'}`}
                     >
-                        <SymbolView name={card.isFavorite ? "star.fill" : "star"} size={20} tintColor={card.isFavorite ? "#EAB308" : "#4B5563"} />
-                        <Text className={`font-medium ${card.isFavorite ? 'text-yellow-700' : 'text-gray-700'}`}>Favorite</Text>
+                        <SymbolView name={card.isFavorite ? "star.fill" : "star"} size={20} tintColor={card.isFavorite ? (isDark ? "#FACC15" : "#EAB308") : (isDark ? "#9CA3AF" : "#4B5563")} />
+                        <Text className={`font-medium ${card.isFavorite ? 'text-yellow-700 dark:text-yellow-400' : 'text-gray-700 dark:text-gray-300'}`}>Favorite</Text>
                     </Pressable>
-                    <Pressable onPress={shareCard} className="flex-1 min-w-[45%] bg-blue-100 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
-                        <SymbolView name="square.and.arrow.up" size={20} tintColor="#2563EB" />
-                        <Text className="text-blue-700 font-medium">Share</Text>
+                    <Pressable onPress={shareCard} className="flex-1 min-w-[45%] bg-blue-100 dark:bg-blue-900/40 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
+                        <SymbolView name="square.and.arrow.up" size={20} tintColor={isDark ? "#60A5FA" : "#2563EB"} />
+                        <Text className="text-blue-700 dark:text-blue-400 font-medium">Share</Text>
                     </Pressable>
-                    <Pressable onPress={() => router.push(`/edit/${card.id}`)} className="flex-1 min-w-[45%] bg-green-100 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
-                        <SymbolView name="pencil" size={20} tintColor="#16A34A" />
-                        <Text className="text-green-700 font-medium">Edit</Text>
+                    <Pressable onPress={() => router.push(`/edit/${card.id}`)} className="flex-1 min-w-[45%] bg-green-100 dark:bg-green-900/40 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
+                        <SymbolView name="pencil" size={20} tintColor={isDark ? "#4ADE80" : "#16A34A"} />
+                        <Text className="text-green-700 dark:text-green-400 font-medium">Edit</Text>
                     </Pressable>
-                    <Pressable onPress={exportToPDF} className="w-full bg-gray-800 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
-                        <SymbolView name="doc.fill" size={20} tintColor="#ffffff" />
-                        <Text className="text-white font-medium">Export to PDF</Text>
+                    <Pressable onPress={exportToPDF} className="w-full bg-gray-800 dark:bg-gray-100 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
+                        <SymbolView name="doc.fill" size={20} tintColor={isDark ? "#111827" : "#ffffff"} />
+                        <Text className="text-white dark:text-gray-900 font-medium">Export to PDF</Text>
                     </Pressable>
-                    <Pressable onPress={handleDelete} className="w-full bg-red-100 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
-                        <SymbolView name="trash" size={20} tintColor="#DC2626" />
-                        <Text className="text-red-700 font-medium">Delete</Text>
+                    <Pressable onPress={handleDelete} className="w-full bg-red-100 dark:bg-red-900/40 py-3 rounded-xl items-center flex-row justify-center gap-x-2 active:opacity-80">
+                        <SymbolView name="trash" size={20} tintColor={isDark ? "#F87171" : "#DC2626"} />
+                        <Text className="text-red-700 dark:text-red-400 font-medium">Delete</Text>
                     </Pressable>
                 </View>
             </View>

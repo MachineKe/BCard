@@ -1,9 +1,18 @@
 import { Tabs } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
+import { useColorScheme } from 'nativewind';
 
 export default function TabLayout() {
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
+
     return (
-        <Tabs screenOptions={{ tabBarActiveTintColor: '#2563EB', headerShown: false }}>
+        <Tabs screenOptions={{
+            tabBarActiveTintColor: '#2563EB',
+            tabBarInactiveTintColor: isDark ? '#9CA3AF' : '#6B7280',
+            tabBarStyle: { backgroundColor: isDark ? '#111827' : '#ffffff', borderTopColor: isDark ? '#1F2937' : '#E5E7EB' },
+            headerShown: false
+        }}>
             <Tabs.Screen
                 name="index"
                 options={{

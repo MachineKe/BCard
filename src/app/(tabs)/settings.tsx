@@ -1,3 +1,4 @@
+import { useCardsStore } from '@/store/cardStore';
 import { SymbolView } from 'expo-symbols';
 import { useColorScheme } from 'nativewind';
 import { Pressable, ScrollView, Switch, Text, View } from 'react-native';
@@ -5,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
     const { colorScheme, setColorScheme } = useColorScheme();
+    const { themePreference, setThemePreference } = useCardsStore();
 
     const isDark = colorScheme === 'dark';
 
@@ -23,7 +25,10 @@ export default function SettingsScreen() {
                         </View>
                         <Switch
                             value={isDark}
-                            onValueChange={(val) => setColorScheme(val ? 'dark' : 'light')}
+                            onValueChange={(val) => {
+                                setColorScheme(val ? 'dark' : 'light');
+                                setThemePreference(val ? 'dark' : 'light');
+                            }}
                             trackColor={{ false: "#D1D5DB", true: "#2563EB" }}
                         />
                     </View>
@@ -36,8 +41,12 @@ export default function SettingsScreen() {
                             <Text className="text-base text-gray-900 dark:text-white font-medium">Use System Theme</Text>
                         </View>
                         <Switch
-                            value={colorScheme === 'system'}
-                            onValueChange={(val) => setColorScheme(val ? 'system' : 'light')}
+                            value={themePreference === 'system'}
+                            onValueChange={(val) => {
+                                const newTheme = val ? 'system' : colorScheme;
+                                setColorScheme(newTheme);
+                                setThemePreference(newTheme);
+                            }}
                             trackColor={{ false: "#D1D5DB", true: "#2563EB" }}
                         />
                     </View>

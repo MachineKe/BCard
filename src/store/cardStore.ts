@@ -10,11 +10,16 @@ interface CardsState {
     updateCard: (id: string, card: Partial<BusinessCard>) => void;
     deleteCard: (id: string) => void;
     toggleFavorite: (id: string) => void;
+    themePreference: 'light' | 'dark' | 'system';
+    setThemePreference: (theme: 'light' | 'dark' | 'system') => void;
 }
 
 export const useCardsStore = create<CardsState>((set) => ({
     cards: [],
     isLoading: true,
+
+    themePreference: 'system',
+    setThemePreference: (themePreference) => set({ themePreference }),
 
     loadCards: () => {
         try {

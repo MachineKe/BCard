@@ -5,6 +5,7 @@ import * as crypto from 'expo-crypto';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import * as z from 'zod';
@@ -23,6 +24,8 @@ const schema = z.object({
 export default function CreateCardScreen() {
     const router = useRouter();
     const { addCard } = useCardsStore();
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(schema),
@@ -68,15 +71,16 @@ export default function CreateCardScreen() {
     };
 
     return (
-        <ScrollView className="flex-1 bg-white p-4">
+        <ScrollView className="flex-1 bg-white dark:bg-gray-900 p-4">
             <View className="gap-y-4 pb-12">
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Full Name *</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name *</Text>
                     <Controller
                         control={control} name="name"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                 placeholder="John Doe" value={value} onChangeText={onChange}
                             />
                         )}
@@ -85,12 +89,13 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Job Title *</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Job Title *</Text>
                     <Controller
                         control={control} name="title"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                 placeholder="Software Engineer" value={value} onChangeText={onChange}
                             />
                         )}
@@ -99,12 +104,13 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Company</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company</Text>
                     <Controller
                         control={control} name="company"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                 placeholder="Tech Corp" value={value} onChangeText={onChange}
                             />
                         )}
@@ -112,12 +118,13 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Email</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</Text>
                     <Controller
                         control={control} name="email"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                 placeholder="john@example.com" keyboardType="email-address"
                                 autoCapitalize="none" value={value} onChangeText={onChange}
                             />
@@ -127,12 +134,13 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Phone Number</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</Text>
                     <Controller
                         control={control} name="phone"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                 placeholder="+1 (555) 000-0000" keyboardType="phone-pad"
                                 value={value} onChangeText={onChange}
                             />
@@ -141,12 +149,13 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Website URL</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Website URL</Text>
                     <Controller
                         control={control} name="website"
                         render={({ field: { onChange, value } }) => (
                             <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                className="border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                 placeholder="https://example.com" keyboardType="url"
                                 autoCapitalize="none" value={value} onChangeText={onChange}
                             />
@@ -156,18 +165,19 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Profile Photo (URL or Upload)</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profile Photo (URL or Upload)</Text>
                     <Controller
                         control={control} name="profileImage"
                         render={({ field: { onChange, value } }) => (
                             <View className="flex-row gap-x-2">
                                 <TextInput
-                                    className="flex-1 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                    className="flex-1 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                    placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                     placeholder="https://example.com/avatar.png" keyboardType="url"
                                     autoCapitalize="none" value={value} onChangeText={onChange}
                                 />
-                                <Pressable onPress={() => pickImage(onChange, [1, 1])} className="bg-gray-200 px-4 justify-center rounded-xl active:opacity-70">
-                                    <Text className="text-gray-700 font-medium">Upload</Text>
+                                <Pressable onPress={() => pickImage(onChange, [1, 1])} className="bg-gray-200 dark:bg-gray-800 px-4 justify-center rounded-xl active:opacity-70 border border-transparent dark:border-gray-700">
+                                    <Text className="text-gray-700 dark:text-gray-300 font-medium">Upload</Text>
                                 </Pressable>
                             </View>
                         )}
@@ -176,18 +186,19 @@ export default function CreateCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Company Logo (URL or Upload)</Text>
+                    <Text className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company Logo (URL or Upload)</Text>
                     <Controller
                         control={control} name="companyLogo"
                         render={({ field: { onChange, value } }) => (
                             <View className="flex-row gap-x-2">
                                 <TextInput
-                                    className="flex-1 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                    className="flex-1 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
+                                    placeholderTextColor={isDark ? '#9CA3AF' : '#9CA3AF'}
                                     placeholder="https://example.com/logo.png" keyboardType="url"
                                     autoCapitalize="none" value={value} onChangeText={onChange}
                                 />
-                                <Pressable onPress={() => pickImage(onChange)} className="bg-gray-200 px-4 justify-center rounded-xl active:opacity-70">
-                                    <Text className="text-gray-700 font-medium">Upload</Text>
+                                <Pressable onPress={() => pickImage(onChange)} className="bg-gray-200 dark:bg-gray-800 px-4 justify-center rounded-xl active:opacity-70 border border-transparent dark:border-gray-700">
+                                    <Text className="text-gray-700 dark:text-gray-300 font-medium">Upload</Text>
                                 </Pressable>
                             </View>
                         )}

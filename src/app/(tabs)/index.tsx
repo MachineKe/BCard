@@ -16,11 +16,11 @@ export default function HomeScreen() {
     }, [loadCards]);
 
     return (
-        <SafeAreaView className="flex-1 bg-gray-50">
+        <SafeAreaView className="flex-1 bg-gray-50 dark:bg-gray-900">
             <View className="flex-1 px-4 pt-4">
-                <Text className="text-3xl font-bold text-gray-900 mb-6">My Cards</Text>
+                <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-6">My Cards</Text>
                 {isLoading ? (
-                    <Text className="text-gray-500 mt-4 text-center">Loading cards...</Text>
+                    <Text className="text-gray-500 dark:text-gray-400 mt-4 text-center">Loading cards...</Text>
                 ) : (
                     <FlatList
                         data={cards}
@@ -33,9 +33,9 @@ export default function HomeScreen() {
                         )}
                         ListEmptyComponent={
                             <View className="flex-1 items-center justify-center mt-20">
-                                <SymbolView name="person.crop.rectangle.stack" size={64} tintColor="#CBD5E1" />
-                                <Text className="text-gray-500 text-lg font-medium mt-4">No cards yet</Text>
-                                <Text className="text-gray-400 text-sm mt-1">Create your first digital business card!</Text>
+                                <SymbolView name="person.crop.rectangle.stack" size={64} tintColor="#6B7280" />
+                                <Text className="text-gray-500 dark:text-gray-400 text-lg font-medium mt-4">No cards yet</Text>
+                                <Text className="text-gray-400 dark:text-gray-500 text-sm mt-1">Create your first digital business card!</Text>
                             </View>
                         }
                     />

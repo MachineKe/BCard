@@ -5,13 +5,16 @@ import * as Print from 'expo-print';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { SymbolView } from 'expo-symbols';
-import { Alert, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { useRef } from 'react';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
+import { captureRef } from 'react-native-view-shot';
 
 export default function CardDetailsScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const router = useRouter();
     const { cards, deleteCard, toggleFavorite } = useCardsStore();
+    const cardRef = useRef<View>(null);
 
     const card = cards.find(c => c.id === id);
 
@@ -108,10 +111,14 @@ export default function CardDetailsScreen() {
 
     const shareCard = async () => {
         try {
-            const link = card.website || `https://bcard.app/c/${card.id}`;
-            await Share.share({
-                message: `Check out my business card: ${link}`,
-            });
+            if (cardRef.current) {
+                const uri = await captureRef(cardRef, {
+                    format: 'png',
+                    quality: 1,
+                });
+
+                await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Share your business card' });
+            }
         } catch (err: any) {
             console.error("Share Error: ", err);
             Alert.alert("Error", `Could not share card: ${err.message || err}`);
@@ -121,7 +128,9 @@ export default function CardDetailsScreen() {
     return (
         <ScrollView className="flex-1 bg-gray-50">
             <View className="p-4 gap-y-6">
-                <CorporateTemplate card={card} />
+                <View ref={cardRef} collapsable={false}>
+                    <CorporateTemplate card={card} />
+                </View>
 
                 <View className="bg-white rounded-2xl p-6 items-center shadow-sm border border-gray-100">
                     <Text className="font-semibold text-gray-900 mb-4">Scan to Save Contact</Text>

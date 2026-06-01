@@ -67,11 +67,13 @@ export default function CardDetailsScreen() {
             <head>
                 <style>
                     @page { margin: 20px; }
-                    body { font-family: sans-serif; background-color: #f9fafb; margin: 0; padding: 20px; display: flex; justify-content: center; }
+                    body { font-family: sans-serif; background-color: #f9fafb; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+                    .card { background: white; padding: 40px; border-radius: 16px; border: 1px solid #e5e7eb; width: 100%; max-width: 500px; text-align: center; box-sizing: border-box; }
+                    .page-break { page-break-before: always; break-before: page; margin-top: 40px; }
                 </style>
             </head>
             <body>
-                <div style="background: white; padding: 40px; border-radius: 16px; border: 1px solid #e5e7eb; width: 100%; max-width: 500px; text-align: center;">
+                <div class="card">
                     ${profileImageSrc ? `<img src="${profileImageSrc}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 16px;" />` : ''}
                     <h1 style="color: #111827; margin-bottom: 8px; font-size: 32px;">${card.name}</h1>
                     <h3 style="color: #2563EB; margin-top: 0; font-size: 20px;">${card.title}</h3>
@@ -82,10 +84,10 @@ export default function CardDetailsScreen() {
                         ${card.phone ? `<p style="margin: 8px 0; color: #374151;"><strong>Phone:</strong> ${card.phone}</p>` : ''}
                         ${card.website ? `<p style="margin: 8px 0; color: #374151;"><strong>Website:</strong> ${card.website}</p>` : ''}
                     </div>
-                    <div style="margin-top: 32px; text-align: center;">
-                        <p style="color: #111827; font-weight: 600; margin-bottom: 12px;">Scan to Save Contact</p>
-                        <img src="https://quickchart.io/qr?text=${encodeURIComponent(vCardData)}&size=200" width="150" height="150" />
-                    </div>
+                </div>
+                <div class="card page-break" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px;">
+                    <p style="color: #111827; font-weight: 600; font-size: 24px; margin-bottom: 24px;">Scan to Save Contact</p>
+                    <img src="https://quickchart.io/qr?text=${encodeURIComponent(vCardData)}&size=250" width="250" height="250" />
                 </div>
             </body>
             </html>

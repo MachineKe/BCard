@@ -37,7 +37,13 @@
         }
       ],
       "expo-sqlite",
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs photo library access to upload your business card avatar and company logo."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

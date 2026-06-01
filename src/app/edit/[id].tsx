@@ -1,5 +1,7 @@
 import { useCardsStore } from '@/store/cardStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as FileSystem from 'expo-file-system/legacy';
+import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
@@ -12,8 +14,8 @@ const schema = z.object({
     phone: z.string().optional(),
     email: z.string().email('Invalid email').optional().or(z.literal('')),
     website: z.string().url('Invalid URL').optional().or(z.literal('')),
-    profileImage: z.string().url('Invalid URL').optional().or(z.literal('')),
-    companyLogo: z.string().url('Invalid URL').optional().or(z.literal('')),
+    profileImage: z.string().optional(),
+    companyLogo: z.string().optional(),
 });
 
 export default function EditCardScreen() {
@@ -44,6 +46,27 @@ export default function EditCardScreen() {
             </View>
         );
     }
+
+    const pickImage = async (onChange: (value: string) => void, aspect?: [number, number]) => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            aspect,
+            quality: 0.8,
+        });
+
+        if (!result.canceled) {
+            try {
+                const asset = result.assets[0];
+                const filename = asset.uri.split('/').pop() || `image-${Date.now()}.jpg`;
+                const newUri = `${FileSystem.documentDirectory}${filename}`;
+                await FileSystem.copyAsync({ from: asset.uri, to: newUri });
+                onChange(newUri);
+            } catch (error) {
+                Alert.alert('Error', 'Failed to save image locally');
+            }
+        }
+    };
 
     const onSubmit = (data: any) => {
         try {
@@ -143,30 +166,40 @@ export default function EditCardScreen() {
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Profile Photo URL</Text>
+                    <Text className="text-sm font-medium text-gray-700 mb-1">Profile Photo (URL or Upload)</Text>
                     <Controller
                         control={control} name="profileImage"
                         render={({ field: { onChange, value } }) => (
-                            <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
-                                placeholder="https://example.com/avatar.png" keyboardType="url"
-                                autoCapitalize="none" value={value} onChangeText={onChange}
-                            />
+                            <View className="flex-row gap-x-2">
+                                <TextInput
+                                    className="flex-1 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                    placeholder="https://example.com/avatar.png" keyboardType="url"
+                                    autoCapitalize="none" value={value} onChangeText={onChange}
+                                />
+                                <Pressable onPress={() => pickImage(onChange, [1, 1])} className="bg-gray-200 px-4 justify-center rounded-xl active:opacity-70">
+                                    <Text className="text-gray-700 font-medium">Upload</Text>
+                                </Pressable>
+                            </View>
                         )}
                     />
                     {errors.profileImage && <Text className="text-red-500 text-xs mt-1">{errors.profileImage.message as string}</Text>}
                 </View>
 
                 <View>
-                    <Text className="text-sm font-medium text-gray-700 mb-1">Company Logo URL</Text>
+                    <Text className="text-sm font-medium text-gray-700 mb-1">Company Logo (URL or Upload)</Text>
                     <Controller
                         control={control} name="companyLogo"
                         render={({ field: { onChange, value } }) => (
-                            <TextInput
-                                className="border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
-                                placeholder="https://example.com/logo.png" keyboardType="url"
-                                autoCapitalize="none" value={value} onChangeText={onChange}
-                            />
+                            <View className="flex-row gap-x-2">
+                                <TextInput
+                                    className="flex-1 border border-gray-300 rounded-xl px-4 py-3 bg-gray-50"
+                                    placeholder="https://example.com/logo.png" keyboardType="url"
+                                    autoCapitalize="none" value={value} onChangeText={onChange}
+                                />
+                                <Pressable onPress={() => pickImage(onChange)} className="bg-gray-200 px-4 justify-center rounded-xl active:opacity-70">
+                                    <Text className="text-gray-700 font-medium">Upload</Text>
+                                </Pressable>
+                            </View>
                         )}
                     />
                     {errors.companyLogo && <Text className="text-red-500 text-xs mt-1">{errors.companyLogo.message as string}</Text>}

@@ -40,6 +40,24 @@ export default function CardDetailsScreen() {
     };
 
     const exportToPDF = async () => {
+        let profileImageSrc = card.profileImage;
+        try {
+            if (profileImageSrc?.startsWith('file://')) {
+                const base64 = await FileSystem.readAsStringAsync(profileImageSrc, { encoding: 'base64' });
+                const mimeType = profileImageSrc.endsWith('.png') ? 'image/png' : 'image/jpeg';
+                profileImageSrc = `data:${mimeType};base64,${base64}`;
+            }
+        } catch (e) { console.error("Failed to load profile image for PDF", e); }
+
+        let companyLogoSrc = card.companyLogo;
+        try {
+            if (companyLogoSrc?.startsWith('file://')) {
+                const base64 = await FileSystem.readAsStringAsync(companyLogoSrc, { encoding: 'base64' });
+                const mimeType = companyLogoSrc.endsWith('.png') ? 'image/png' : 'image/jpeg';
+                companyLogoSrc = `data:${mimeType};base64,${base64}`;
+            }
+        } catch (e) { console.error("Failed to load company logo for PDF", e); }
+
         const html = `
             <!DOCTYPE html>
             <html>
@@ -51,9 +69,11 @@ export default function CardDetailsScreen() {
             </head>
             <body>
                 <div style="background: white; padding: 40px; border-radius: 16px; border: 1px solid #e5e7eb; width: 100%; max-width: 500px; text-align: center;">
+                    ${profileImageSrc ? `<img src="${profileImageSrc}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 16px;" />` : ''}
                     <h1 style="color: #111827; margin-bottom: 8px; font-size: 32px;">${card.name}</h1>
                     <h3 style="color: #2563EB; margin-top: 0; font-size: 20px;">${card.title}</h3>
                     ${card.company ? `<p style="color: #4B5563; font-size: 18px;">${card.company}</p>` : ''}
+                    ${companyLogoSrc ? `<div style="margin-top: 16px;"><img src="${companyLogoSrc}" style="max-height: 40px; object-fit: contain;" /></div>` : ''}
                     <div style="margin-top: 32px; text-align: left; background-color: #f3f4f6; padding: 20px; border-radius: 12px;">
                         ${card.email ? `<p style="margin: 8px 0; color: #374151;"><strong>Email:</strong> ${card.email}</p>` : ''}
                         ${card.phone ? `<p style="margin: 8px 0; color: #374151;"><strong>Phone:</strong> ${card.phone}</p>` : ''}

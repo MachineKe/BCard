@@ -26,6 +26,10 @@ export const initDb = () => {
       updatedAt INTEGER,
       isFavorite INTEGER DEFAULT 0
     );
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY NOT NULL,
+      value TEXT NOT NULL
+    );
   `);
 };
 
@@ -62,5 +66,15 @@ export const CardRepository = {
 
     toggleFavorite: (id: string, isFavorite: boolean) => {
         db.runSync('UPDATE business_cards SET isFavorite = ? WHERE id = ?', isFavorite ? 1 : 0, id);
+    }
+};
+
+export const SettingsRepository = {
+    getTheme: (): 'light' | 'dark' | 'system' => {
+        const result = db.getFirstSync<{ value: string }>('SELECT value FROM settings WHERE key = ?', 'theme');
+        return (result?.value as 'light' | 'dark' | 'system') || 'system';
+    },
+    setTheme: (theme: 'light' | 'dark' | 'system') => {
+        db.runSync('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)', 'theme', theme);
     }
 };

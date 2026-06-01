@@ -1,4 +1,4 @@
-import { CardRepository } from '@/database/sqlite';
+import { CardRepository, SettingsRepository } from '@/database/sqlite';
 import { BusinessCard } from '@/types';
 import { create } from 'zustand';
 
@@ -19,12 +19,16 @@ export const useCardsStore = create<CardsState>((set) => ({
     isLoading: true,
 
     themePreference: 'system',
-    setThemePreference: (themePreference) => set({ themePreference }),
+    setThemePreference: (themePreference) => {
+        SettingsRepository.setTheme(themePreference);
+        set({ themePreference });
+    },
 
     loadCards: () => {
         try {
             const cards = CardRepository.getAll();
-            set({ cards, isLoading: false });
+            const themePreference = SettingsRepository.getTheme();
+            set({ cards, themePreference, isLoading: false });
         } catch (error) {
             console.error("Failed to load cards", error);
             set({ isLoading: false });

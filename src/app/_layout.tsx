@@ -1,5 +1,6 @@
-import { initDb } from '@/database/sqlite';
+import { initDb, SettingsRepository } from '@/database/sqlite';
 import '@/global.css';
+import { useCardsStore } from '@/store/cardStore';
 import { Stack } from 'expo-router';
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-navigation';
 import { useColorScheme } from 'nativewind';
@@ -7,12 +8,15 @@ import { useEffect, useState } from 'react';
 
 export default function RootLayout() {
   const [isDbInitialized, setDbInitialized] = useState(false);
-  const { colorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
 
   useEffect(() => {
     try {
       initDb();
+      const savedTheme = SettingsRepository.getTheme();
+      setColorScheme(savedTheme);
+      useCardsStore.setState({ themePreference: savedTheme });
       setDbInitialized(true);
     } catch (e) {
       console.error(e);

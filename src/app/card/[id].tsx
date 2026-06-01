@@ -1,5 +1,6 @@
 import { CorporateTemplate } from '@/components/templates/CorporateTemplate';
 import { useCardsStore } from '@/store/cardStore';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
@@ -56,8 +57,18 @@ export default function CardDetailsScreen() {
             </html>
         `;
         try {
-            const { uri } = await Print.printToFileAsync({ html });
-            await Sharing.shareAsync(uri);
+            const { base64 } = await Print.printToFileAsync({ html, base64: true });
+
+            const pdfName = `${card.name.replace(/[^a-zA-Z0-9]/g, '_')}_BusinessCard.pdf`;
+            const newUri = `${FileSystem.documentDirectory}${pdfName}`;
+
+            // Write the base64 data directly to avoid Android cache readability issues
+            await FileSystem.writeAsStringAsync(newUri, base64 ?? '', { encoding: 'base64' });
+
+            await Sharing.shareAsync(newUri, {
+                UTI: 'com.adobe.pdf',
+                mimeType: 'application/pdf'
+            });
         } catch (err: any) {
             console.error("PDF Export Error: ", err);
             Alert.alert("Error", `Could not generate or share PDF: ${err.message || err}`);
